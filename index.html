@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Store Design Pattern</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <h2>DESIGN PATTERNS</h1>
+            <hr>
+            <h1>ASSIGNMENT 6 - REPRODUCIBILITY:FEATURE STORE DESIGN PATTERN</h1>
+
+
+    </header>
+    <main>
+        <h3>Introduction</h3>
+        <p>
+            Today we will be looking at a Reproducibility Pattern:Feature Store Design Pattern.The concept of a "Feature
+            Store" in the context of machine learning (ML) refers to a centralized repository for storing, managing, and
+            serving features used in the development and deployment of machine learning models.Features are the input
+            variables or attributes that models use to make predictions. The Feature Store ML design pattern is a way of
+            organizing and handling these features in a systematic and scalable manner.
+
+
+
+
+        </p>
+        <h3>Videos</h3>
+        <table>
+            <tr>
+                <td>FEAST-An opensource project with brief overview of Feature Store</td>
+                <td><a href="https://www.youtube.com/watch?v=DaNv-Wf1MBA&ab_channel=HasgeekTV" target="_blank">ML
+                        FEAST
+                    </a></td>
+            </tr>
+            <tr>
+                <td>What is Feature Store in Machine Learning</td>
+                <td><a href="https://www.youtube.com/watch?v=6xtHTcmEHC8&t=12s&ab_channel=AshutoshTripathi"
+                        target="_blank">The
+                        Feature Store in Machine Learning</a></td>
+            </tr>
+
+        </table>
+        <h3>FeatureStore Design Pattern</h3>
+        <p><em>The Rationale</em></p>
+        <p>Intent of Feature Store Design Pattern is to create centralized location to store and document feature
+            datasets that will be used in building machine learning models.
+        <p>
+            The adoption of a Feature Store can significantly improve the efficiency, reproducibility, and collaboration
+            aspects of
+            machine learning projects. Different organizations may implement variations of this design pattern based on
+            their specific requirements and technological stack.
+
+
+            <!-- The pattern suggests storing the copy of the object’s state in a special object called memento. The contents
+            of the memento aren’t accessible to any other object except the one that produced it. Other objects must
+            communicate with mementos using a limited interface which may allow fetching the snapshot’s metadata
+            (creation time, the name of the performed operation, etc.), but not the original object’s state contained in
+            the snapshot. -->
+
+
+        </p>
+        <p><em>The UML</em></p>
+        <p>
+            Here is the UML for Feature Store Design Pattern:
+        </p>
+        <p>+-------------------------------------+
+            | FeatureStore |
+            +-------------------------------------+
+            | - features: Dict[str, Dict[str, Any]]|
+            +-------------------------------------+
+            | + add_feature(feature_name: str, |
+            | data: Any, |
+            | metadata: Optional[Dict[str, Any]]) |
+            | + get_feature(feature_name: str) -> Any|
+            | + get_feature_version(feature_name: str) -> Optional[int]|
+            | + get_feature_metadata(feature_name: str) -> Optional[Dict[str, Any]]|
+            | + serve_real_time(feature_name: str, input_data: Any)|
+            | + serve_batch(feature_name: str, input_data: Dict[str, Any])|
+            +-------------------------------------+</p>
+        <p>Here are the components of Feature Store Design Pattern</p>
+        <ol>
+            <li>
+                <p>FeatureStore is the main class representing the Feature Store.
+
+
+                </p>
+            </li>
+            <li>
+                <p>The private attribute features is a dictionary where keys are feature names, and values are
+                    dictionaries containing information about the feature, including data, version, and metadata
+                </p>
+            </li>
+            <li>
+                <p>Public methods (add_feature, get_feature, get_feature_version, get_feature_metadata, serve_real_time,
+                    and serve_batch) represent the functionalities of the Feature Store.
+                </p>
+            </li>
+
+        </ol>
+        <p>The typical flow of the Memento pattern involves the following steps:
+
+            The client (or the originator itself) requests the originator to create a memento object, which encapsulates
+            the current state of the originator.
+            The memento is passed to the caretaker, which is responsible for keeping track of the mementos.
+            Later, if needed, the caretaker can provide a stored memento to the originator to restore its state.
+            The Memento pattern is particularly useful in scenarios where you need to implement features like undo
+            mechanisms, versioning systems, or any situation where you want to be able to restore an object to a
+            previous state without exposing its internal details. It promotes encapsulation by separating the concerns
+            of maintaining state and performing operations on that state.
+
+
+
+
+
+        </p>
+        <p><em>Code Example</em></p>
+        <p>The FeatureStore class represents a simple in-memory Feature Store.
+            The add_feature method adds a new feature to the store or updates an existing one, incrementing the version.
+            The get_feature method retrieves a feature from the store.
+            The get_feature_version method retrieves the version of a feature.
+            This is a basic illustration and does not cover aspects like data persistence, scalability, or integration
+            with machine learning pipelines. In a real-world scenario, you would likely use a database, version control,
+            and integration tools to implement a more robust and scalable Feature Store.
+
+
+
+
+        </p>
+        <p><a href="ex1.html" target="_blank">texteditor.cpp</a></p>
+        <p><em>Common Usage</em></p>
+        <div>
+            <ol>
+                <li>
+                    <p>Undo Mechanisms:
+
+                        One of the primary use cases for the Memento pattern is in implementing undo and redo
+                        functionalities. Each time a user performs an action, a memento capturing the current state of
+                        the object is created and stored. If the user decides to undo an action, the object's state is
+                        restored from the previous memento.
+
+                    </p>
+                </li>
+                <li>
+                    <p>Snapshotting:
+
+                        The Memento pattern is useful for creating snapshots or checkpoints of an object's state. This
+                        is valuable in scenarios such as game development, where you might want to save the state of the
+                        game at certain points.
+
+                    </p>
+                </li>
+                <li>
+                    <p>IDEs:The Feature Store Design Pattern is clearly heavily used in any IDEs, as can be seen when
+                        you
+                        constantly use CTRL+ Z, to undo mistakes you have made either intentionally or unintentionally
+                    </p>
+                </li>
+                <li>
+                    <p> Transactional Systems:
+
+                        In systems that support transactions, the Memento pattern can be used to implement rollback
+                        mechanisms. Before committing a transaction, a memento can be created to capture the current
+                        state. If the transaction fails, the state can be reverted to the captured memento
+
+                    </p>
+                </li>
+            </ol>
+        </div>
+        <p><em>Code Problem</em></p>
+        <p>In this extended example:
+
+            The add_feature method now allows the addition of metadata along with the feature data.
+            The get_feature_metadata method retrieves the metadata associated with a feature.
+            The serve_real_time method simulates real-time serving by using the latest version of the feature for
+            prediction.
+            The serve_batch method simulates batch serving, allowing users to specify the version of the feature they
+            want to use for prediction.
+            This example still uses an in-memory data structure, but in a real-world scenario, you would replace this
+            with a database or another storage solution. Additionally, the serving methods would typically involve using
+            machine learning models for predictions based on the provided features.</p>
+        <a href="ex2.html" target="_blank">taskManager.cpp</a>
+
+
+    </main>
+
+</body>
+
+</html>
