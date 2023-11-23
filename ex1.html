@@ -2,63 +2,99 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="color-scheme" content="light dark">
-	<title>Example-1</title>
+    <meta charset="UTF-8">
+    <meta name="color-scheme" content="light dark">
+    <title>xyz.py</title>
 </head>
 
 <body>
-	<pre style="word-wrap: break-word; white-space: pre-wrap;">
-		class FeatureStore:
-    def _init_(self):
-        self.features = {}
+    <pre style="word-wrap: break-word; white-space: pre-wrap;">
+import datetime
 
-    def add_feature(self, feature_name, data):
-        if feature_name not in self.features:
-            self.features[feature_name] = {'data': data, 'version': 1}
+class FeatureStore:
+def _init_(self):
+    self.features = {}
+
+def add_feature(self, feature_name, data, metadata=None):
+    if feature_name not in self.features:
+        self.features[feature_name] = {'data': data, 'version': 1, 'metadata': metadata}
+    else:
+        self.features[feature_name]['data'] = data
+        self.features[feature_name]['version'] += 1
+
+def get_feature(self, feature_name):
+    if feature_name in self.features:
+        return self.features[feature_name]['data']
+    else:
+        print(f"Feature '{feature_name}' not found in the Feature Store.")
+        return None
+
+def get_feature_version(self, feature_name):
+    if feature_name in self.features:
+        return self.features[feature_name]['version']
+    else:
+        print(f"Feature '{feature_name}' not found in the Feature Store.")
+        return None
+
+def get_feature_metadata(self, feature_name):
+    if feature_name in self.features:
+        return self.features[feature_name]['metadata']
+    else:
+        print(f"Metadata for Feature '{feature_name}' not found in the Feature Store.")
+        return None
+
+def serve_real_time(self, feature_name, input_data):
+    # Simulate real-time serving by using the latest version of the feature
+    feature_data = self.get_feature(feature_name)
+    if feature_data:
+        print(f"Real-time prediction using feature '{feature_name}': {input_data} -> {feature_data}")
+        # In a real-world scenario, you would apply a model for prediction here
+    else:
+        print("Real-time prediction failed.")
+
+def serve_batch(self, feature_name, input_data):
+    # Simulate batch serving by allowing users to specify the version of the feature
+    specified_version = input_data.get('version')
+    if specified_version is not None:
+        feature_data = self.get_feature(feature_name)
+        if feature_data and specified_version == self.get_feature_version(feature_name):
+            print(f"Batch prediction using feature '{feature_name}' (Version {specified_version}): {feature_data}")
+            # In a real-world scenario, you would apply a model for batch prediction here
         else:
-            self.features[feature_name]['data'] = data
-            self.features[feature_name]['version'] += 1
+            print("Batch prediction failed. Specified version does not match the latest version.")
+    else:
+        print("Batch prediction failed. Version not specified.")
 
-    def get_feature(self, feature_name):
-        if feature_name in self.features:
-            return self.features[feature_name]['data']
-        else:
-            print(f"Feature '{feature_name}' not found in the Feature Store.")
-            return None
+# Example Usage
+if _name_ == "_main_":
+    # Create a FeatureStore instance
+    feature_store = FeatureStore()
 
-    def get_feature_version(self, feature_name):
-        if feature_name in self.features:
-            return self.features[feature_name]['version']
-        else:
-            print(f"Feature '{feature_name}' not found in the Feature Store.")
-            return None
+    # Add features with metadata
+    feature_store.add_feature('age', [25, 30, 35, 40, 45], {'unit': 'years'})
+    feature_store.add_feature('income', [50000, 60000, 75000, 90000, 100000], {'currency': 'USD'})
 
+    # Get feature metadata
+    age_metadata = feature_store.get_feature_metadata('age')
+    income_metadata = feature_store.get_feature_metadata('income')
 
-	# Example Usage
-	if _name_ == "_main_":
-		# Create a FeatureStore instance
-		feature_store = FeatureStore()
+    print(f"Metadata for 'age': {age_metadata}")
+    print(f"Metadata for 'income': {income_metadata}")
 
-		# Add a new feature to the store
-		feature_store.add_feature('age', [25, 30, 35, 40, 45])
+    # Simulate real-time serving
+    feature_store.serve_real_time('age', input_data=28)
 
-		# Get the feature from the store
-		age_feature = feature_store.get_feature('age')
-		print(f"Age Feature: {age_feature}")
-
-		# Add a new version of the feature
-		feature_store.add_feature('age', [26, 31, 36, 41, 46])
-
-		# Get the updated feature and version
-		updated_age_feature = feature_store.get_feature('age')
-		version = feature_store.get_feature_version('age')
-
-		print(f"Updated Age Feature: {updated_age_feature}")
-		print(f"Feature Version: {version}")
+    # Simulate batch serving
+    batch_input_data = {'feature_name': 'income', 'version': 1}
+    feature_store.serve_batch('income', input_data=batch_input_data)
+        
 
 
-	</pre>
+        
+
+
+
+    </pre>
 
 </body>
 

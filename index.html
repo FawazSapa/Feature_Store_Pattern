@@ -32,7 +32,7 @@
         <h3>Videos</h3>
         <table>
             <tr>
-                <td>FEAST-An opensource project with brief overview of Feature Store</td>
+                <td>FEAST-An open source project with brief overview of Feature Store</td>
                 <td><a href="https://www.youtube.com/watch?v=DaNv-Wf1MBA&ab_channel=HasgeekTV" target="_blank">ML
                         FEAST
                     </a></td>
@@ -68,21 +68,32 @@
         <p>
             Here is the UML for Feature Store Design Pattern:
         </p>
-        <p>+-------------------------------------+
-            | FeatureStore |
-            +-------------------------------------+
-            | - features: Dict[str, Dict[str, Any]]|
-            +-------------------------------------+
-            | + add_feature(feature_name: str, |
-            | data: Any, |
-            | metadata: Optional[Dict[str, Any]]) |
-            | + get_feature(feature_name: str) -> Any|
-            | + get_feature_version(feature_name: str) -> Optional[int]|
+        <pre style="word-wrap: break-word; white-space: pre-wrap;">
+            +----------------------------------------------------------------------+
+            | FeatureStore                                                         |
+            +----------------------------------------------------------------------+
+            | - features: Dict[str, Dict[str, Any]]                                |
+            +----------------------------------------------------------------------+
+            | + add_feature(feature_name: str,                                     |
+            | data: Any,                                                           |
+            | metadata: Optional[Dict[str, Any]])                                  |
+            | + get_feature(feature_name: str) -> Any                              |
+            | + get_feature_version(feature_name: str) -> Optional[int]            |
             | + get_feature_metadata(feature_name: str) -> Optional[Dict[str, Any]]|
-            | + serve_real_time(feature_name: str, input_data: Any)|
-            | + serve_batch(feature_name: str, input_data: Dict[str, Any])|
-            +-------------------------------------+</p>
+            | + serve_real_time(feature_name: str, input_data: Any)                |
+            | + serve_batch(feature_name: str, input_data: Dict[str, Any])         |
+            +----------------------------------------------------------------------+
+                                            ^
+                                            |
+                                +------------------------+
+                                |         Model          |
+                                +------------------------+
+                                |  -train()              |
+                                |  -predict()            |
+                                +------------------------+
+        </pre>
         <p>Here are the components of Feature Store Design Pattern</p>
+        <strong>FeatureStore Class:</strong>
         <ol>
             <li>
                 <p>FeatureStore is the main class representing the Feature Store.
@@ -102,16 +113,21 @@
             </li>
 
         </ol>
-        <p>The typical flow of the Memento pattern involves the following steps:
+        <strong>Model:</strong>
+        <ol>
+            <li>
+                Model uses the features from the feature store to make prediction.
+            </li>
+        </ol>
+        <p>The typical flow of the Feature Store involves the following steps:
+            The FeatureSet class represents a collection of features with a specific version.
+            It contains a list of features and methods to Add, modify, or remove features as needed using methods like
+            add_feature, remove_feature, etc.
+            It acts as our centralized repository to store features.You can add new features along with the metadata.
+            The basemodel uses these features to train and then make predictions with real-time new features.
+            Hence simplying the process and eliminating time to access the features.
 
-            The client (or the originator itself) requests the originator to create a memento object, which encapsulates
-            the current state of the originator.
-            The memento is passed to the caretaker, which is responsible for keeping track of the mementos.
-            Later, if needed, the caretaker can provide a stored memento to the originator to restore its state.
-            The Memento pattern is particularly useful in scenarios where you need to implement features like undo
-            mechanisms, versioning systems, or any situation where you want to be able to restore an object to a
-            previous state without exposing its internal details. It promotes encapsulation by separating the concerns
-            of maintaining state and performing operations on that state.
+
 
 
 
@@ -120,69 +136,93 @@
         </p>
         <p><em>Code Example</em></p>
         <p>The FeatureStore class represents a simple in-memory Feature Store.
-            The add_feature method adds a new feature to the store or updates an existing one, incrementing the version.
+            The add_feature method allows the addition of metadata along with the feature data.
             The get_feature method retrieves a feature from the store.
             The get_feature_version method retrieves the version of a feature.
-            This is a basic illustration and does not cover aspects like data persistence, scalability, or integration
-            with machine learning pipelines. In a real-world scenario, you would likely use a database, version control,
-            and integration tools to implement a more robust and scalable Feature Store.
-
-
-
-
-        </p>
-        <p><a href="ex1.html" target="_blank">texteditor.cpp</a></p>
-        <p><em>Common Usage</em></p>
-        <div>
-            <ol>
-                <li>
-                    <p>Undo Mechanisms:
-
-                        One of the primary use cases for the Memento pattern is in implementing undo and redo
-                        functionalities. Each time a user performs an action, a memento capturing the current state of
-                        the object is created and stored. If the user decides to undo an action, the object's state is
-                        restored from the previous memento.
-
-                    </p>
-                </li>
-                <li>
-                    <p>Snapshotting:
-
-                        The Memento pattern is useful for creating snapshots or checkpoints of an object's state. This
-                        is valuable in scenarios such as game development, where you might want to save the state of the
-                        game at certain points.
-
-                    </p>
-                </li>
-                <li>
-                    <p>IDEs:The Feature Store Design Pattern is clearly heavily used in any IDEs, as can be seen when
-                        you
-                        constantly use CTRL+ Z, to undo mistakes you have made either intentionally or unintentionally
-                    </p>
-                </li>
-                <li>
-                    <p> Transactional Systems:
-
-                        In systems that support transactions, the Memento pattern can be used to implement rollback
-                        mechanisms. Before committing a transaction, a memento can be created to capture the current
-                        state. If the transaction fails, the state can be reverted to the captured memento
-
-                    </p>
-                </li>
-            </ol>
-        </div>
-        <p><em>Code Problem</em></p>
-        <p>In this extended example:
-
-            The add_feature method now allows the addition of metadata along with the feature data.
             The get_feature_metadata method retrieves the metadata associated with a feature.
             The serve_real_time method simulates real-time serving by using the latest version of the feature for
             prediction.
             The serve_batch method simulates batch serving, allowing users to specify the version of the feature they
             want to use for prediction.
-            This example still uses an in-memory data structure, but in a real-world scenario, you would replace this
+            This example uses an in-memory data structure, but in a real-world scenario, you would replace this
             with a database or another storage solution. Additionally, the serving methods would typically involve using
-            machine learning models for predictions based on the provided features.</p>
+            machine learning models for predictions based on the provided features.
+
+
+
+
+        </p>
+        <p><a href="ex1.html" target="_blank">featureStore.py</a></p>
+        <p><em>Common Usage</em></p>
+        <div>
+            <ol>
+                <li>
+                    <p>Detecting fraudulent activities in financial transactions:
+
+                        In the context of financial fraud detection, the Feature Store stores features such as customer
+                        transaction history, account details, spending patterns, and other relevant information. By
+                        centralizing this data, the Feature Store provides a consistent and organized set of features
+                        for machine learning models. These models can then analyze patterns and anomalies to identify
+                        potentially fraudulent transactions. The Feature Store's role is critical in maintaining the
+                        integrity and accessibility of the features needed to train and deploy effective fraud detection
+                        models
+
+                    </p>
+                </li>
+                <li>
+                    <p>Predictive Maintenance in Manufacturing:
+                        The Feature Store plays a crucial role by storing historical sensor data, maintenance records,
+                        and other relevant features. These features include information about equipment health,
+                        operating conditions, and past maintenance events. By maintaining a centralized repository, the
+                        Feature Store enables machine learning models to learn patterns and correlations that can be
+                        used to predict when equipment failures are likely to occur. This contributes to optimizing
+                        maintenance schedules, minimizing downtime, and reducing operational costs.
+
+
+
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Developing models for autonomous driving:
+                        The Feature Store is responsible for storing diverse data from sensors such as lidar, radar,
+                        cameras, maps, and historical driving patterns. This centralized repository provides a
+                        comprehensive set of features for training machine learning models that power autonomous
+                        vehicles. The Feature Store's role is essential in managing and versioning these features,
+                        ensuring that models are trained on relevant and up-to-date data to make accurate decisions in
+                        real-world driving scenarios.
+
+                    </p>
+                </li>
+                <li>
+                    <p> Chatbots and Sentiment Analysis models:
+
+                        The Feature Store is responsible for storing linguistic features, historical conversations,
+                        contextual information, and other relevant data used in NLP applications. By maintaining a
+                        centralized repository for these features, the Feature Store supports the training of machine
+                        learning models. These models can then understand and generate human-like language, enabling the
+                        development of chatbots, sentiment analysis tools, or language translation applications. The
+                        Feature Store's role is crucial in managing the diverse and complex features required for
+                        natural language processing tasks.
+
+                    </p>
+                </li>
+                <li>
+                    <p> Assessing the creditworthiness of individuals
+
+                        The Feature Store stores financial history, credit scores, and other relevant features used in
+                        assessing the creditworthiness of individuals. By providing a centralized and organized set of
+                        features, the Feature Store supports the training of credit scoring models. These models analyze
+                        historical financial data to predict the likelihood of individuals repaying loans or meeting
+                        financial obligations.
+
+                    </p>
+                </li>
+
+            </ol>
+        </div>
+        <p><em>Code Problem</em></p>
+        <p></p>
         <a href="ex2.html" target="_blank">taskManager.cpp</a>
 
 
